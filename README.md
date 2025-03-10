@@ -1,6 +1,6 @@
 # Puppeteer Scraper
 
-This project is a simple web scraper built using Puppeteer. It allows you to scrape a given URL, take a screenshot of the page, and handle incoming events for scraping via a handler function.
+This project is a simple web scraper built using Puppeteer and the stealth plugin for web scraping. A recursive div function tunnels into nested divs to cleanly extract text. It allows you to scrape a given URL, take a screenshot of the page, and handle incoming events for scraping via a handler function.
 
 ## Files
 
