@@ -65,6 +65,34 @@ export async function scrape(url) {
     const divSpanText = await extractText(page);
     console.log('divSpanText', divSpanText);
 
+    async function getFaviconUrl(page) {
+      try {
+        // Try to find a favicon link element
+        const faviconLink = await page.$('link[rel="icon"]');
+        if (faviconLink) {
+          const faviconUrl = await page.evaluate(
+            (link) => link.href,
+            faviconLink
+          );
+          return faviconUrl;
+        } else {
+          console.log(
+            'No favicon <link> found, attempting to construct from /favicon.ico'
+          );
+          // If no link element, try constructing the URL from /favicon.ico
+          const pageUrl = page.url();
+          const baseUrl = new URL(pageUrl).origin;
+          return `${baseUrl}/favicon.ico`;
+        }
+      } catch (error) {
+        console.error('Error getting favicon URL:', error.message);
+        return null;
+      }
+    }
+
+    const faviconUrl = await getFaviconUrl(page);
+    console.log('Favicon URL:', faviconUrl);
+
     await browser.close();
     console.log('success');
     return { message: 'Scraping successful' };
