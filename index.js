@@ -112,10 +112,18 @@ export async function scrape(url) {
     // Handle Cookies (clear them)
     const context = browser.defaultBrowserContext();
     context.overridePermissions(url, ['notifications']);
-    await page.deleteCookie(...(await page.cookies()));
+    //await page.deleteCookie(...(await page.cookies()));
 
     await page.goto(url);
+
     await delay(Math.random() * 2000 + 1000);
+    // Get all cookies
+    const cookies = await page.cookies();
+    console.log('Cookies after first visit:', cookies);
+
+    // Second visit, presenting the cookie
+    await page.setCookie(...cookies); // Set the cookies for the page
+
     await page.screenshot({ path: 'example.png' });
     const h1 = await page.$$eval('h1', (elements) =>
       elements.map((el) => el.innerText || el.textContent)
